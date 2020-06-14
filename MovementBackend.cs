@@ -89,6 +89,13 @@ namespace MovementHandler
             }
         }
 
+        /// <summary>
+        /// 3D Physics based jump mechanic where jump needs to be specified.
+        /// </summary>
+        /// <param name="rb">RigidBody component</param>
+        /// <param name="IsGrounded"> Boolean to check if on the ground or not.</param>
+        /// <param name="vertical"> Float value for polling user input.</param>
+        /// <param name="jumpForce"> Float value for how high the character will jump.</param>
         public void Jump(Rigidbody rb, bool IsGrounded, float vertical, float jumpForce)
         {
             // check if the space key is pressed and the boolean evaluates to true.
