@@ -138,5 +138,20 @@ namespace MovementHandler
                 IsGrounded = false;
             }
         }
+
+        /// <summary>
+        /// 2D physics based modified jump script which is used for bouncing off objects.
+        /// </summary>
+        /// <param name="rb">RigidBody2D component</param>
+        /// <param name="bounceForce">Vector2 for how high the player can bounce off the object (0, 10).</param>
+        /// <param name="canBounce">boolean for if the player can bounce or not.</param>
+        public void Bounce(Rigidbody2D rb, Vector2 bounceForce, bool canBounce)
+        {
+            // if canBounce evailuates to false, exit from the function.
+            if (!canBounce) return;
+            // Adds an upwards impulse for the character to move in an upward direction
+            // then fall back down due to gravity.
+            rb.AddForce(bounceForce, ForceMode2D.Impulse);
+        }
     }
 }
