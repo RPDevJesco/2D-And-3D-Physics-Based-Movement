@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using MovementHandler;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -10,6 +10,8 @@ public class Movement2D : MonoBehaviour
     public Vector2 jumpForce;
     // check to see if the object is in the air or on the ground
     public bool IsGrounded = false;
+    // check to see if the object can bounce or not.
+    public bool canBounce = false;
     // Horizontal Input.
     private float horizontal;
     // Jump input
@@ -35,9 +37,16 @@ public class Movement2D : MonoBehaviour
         _movementBackend.Jump(rb, jumpForce, vertical);
     }
 
+    // Function that calls the backend's bounce function and fills in the data.
+    private void Bounce()
+    {
+        _movementBackend.Bounce(rb, jumpForce, canBounce);
+    }
+
     // Physics update call. Only affects the Move and Jump
     private void FixedUpdate()
     {
+        Bounce();
         Move();
         Jump();
     }
@@ -55,6 +64,11 @@ public class Movement2D : MonoBehaviour
         if (collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Wall"))
         {
             IsGrounded = true;
+        }
+
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            canBounce = true;
         }
     }
 
@@ -82,5 +96,6 @@ public class Movement2D : MonoBehaviour
     private void OnCollisionExit2D(Collision2D collision)
     {
         IsGrounded = false;
+        canBounce = false;
     }
 }
