@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 
+// Namespace organizes the code in such a way that there will not be name collisions for method or class names
+// from other sources of code such as Unity's API, code entered by the user or via code obtained from asset packs.
 namespace MovementHandler
 {
     public class MovementBackend
@@ -35,6 +37,34 @@ namespace MovementHandler
             Vector3 fullMovement = movement.normalized * speed * frameTime;
             // move the physics body based off the transform's position and add the movement to it.
             rb.MovePosition(transform.position + fullMovement);
+        }
+
+        /// <summary>
+        /// 3D Physics based movement with rotation.
+        /// </summary>
+        /// <param name="transform">The player's transform component.</param>
+        /// <param name="rb">Rigidbody component</param>
+        /// <param name="horizontal">Left and Right movement. Input.GetAxis("Horizontal")</param>
+        /// <param name="vertical">Up and Down movement. Input.GetAxis("Vertical")</param>
+        /// <param name="depth">Forward and Backwards movement. Input.GetAxis("Vertical")</param>
+        /// <param name="speed">Speed value on how fast the character should move</param>
+        /// <param name="rotationX">Rotation on the Y axis. Input.GetAxis("Mouse X")</param>
+        /// <param name="rotationY">Rotation on the X axis. Input.GetAxis("Mouse Y")</param>
+        /// <param name="frameTime">Pass Time.fixedDeltaTime for physics based movement.</param>
+        public void Move(Transform transform, Rigidbody rb, float horizontal, float vertical, float depth, float speed, float rotationX, float rotationY, float frameTime)
+        {
+            // Create a vector to house the three movement variables we need.
+            Vector3 movement = new Vector3(horizontal, vertical, depth);
+            // normalize the movement and add the speed and frames
+            Vector3 fullMovement = movement.normalized * speed * frameTime;
+            // move the physics body based off the transform's position and add the movement to it.
+            rb.MovePosition(transform.position + fullMovement);
+            // Create a Vector to house the rotation variables
+            Vector3 rotation = new Vector3(rotationX, rotationY, 0);
+            // Create a quaternion to convert and store rotation delta values
+            Quaternion deltaRotation = Quaternion.Euler(rotation * speed);
+            // Pass the rigidbody's rotation and multiply it by the deltaRotation for smooth rotation.
+            rb.MoveRotation(rb.rotation * deltaRotation);
         }
 
         /// <summary>
