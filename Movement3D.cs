@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using MovementHandler;
 
 // Force this script to only work if a Rigidbody is attached to the object this script is attached to.
@@ -19,18 +19,27 @@ public class Movement3D : MonoBehaviour
     private float vertical;
     // Jump Input
     private float jumpInput;
+    // Mouse move Horizontal Input
+    private float rotationX;
+    // Mouse move Vertical Input
+    private float rotationY;
+    // Frame update time value
+    private float frameTime;
     // Grab a reference to the movement backend
     private readonly MovementBackend _movementBackend = new MovementBackend();
 
     // Function that calls the backend's move function and fills in the data.
     void Move()
     {
-        _movementBackend.Move(this.transform, rb,
+        _movementBackend.Move(this.transform,
+            rb,
             horizontal,
             0,
             vertical,
             Speed,
-            Time.fixedDeltaTime);
+            0,
+            rotationY,
+            frameTime);
     }
 
     // Function that calls the backend's jump function and fills in the data.
@@ -77,6 +86,7 @@ public class Movement3D : MonoBehaviour
     // Physics update call. Only affects the Move and Jump
     private void FixedUpdate()
     {
+        frameTime = Time.fixedDeltaTime;
         Move();
         Jump();
     }
@@ -87,6 +97,6 @@ public class Movement3D : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         jumpInput = Input.GetAxis("Jump");
+        rotationY = Input.GetAxis("Mouse Y");
     }
-
 }
